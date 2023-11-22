@@ -59,7 +59,7 @@ app.post('/ai', async (c) => {
   // Make request to Workers AI
   const ai = new Ai(c.env.AI)
   const image: Uint8Array = await ai.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', {
-    prompt: "A basic black and white coloring book page for a 7 year old of " + prompt
+    prompt: `A basic black and white coloring book page for a 7 year old of ${prompt}.`
   })
 
   // Convert response to base64
