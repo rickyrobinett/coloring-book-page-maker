@@ -12,9 +12,9 @@ npm run dev
 npm run deploy
 ```
 
-## Example
+## Example (Sped up)
 
-![output](https://github.com/yusukebe/my-first-workers-ai/assets/10682/87195a39-67c3-4a33-8895-8cfed9c8982e)
+![coloring-page](https://github.com/rickyrobinett/coloring-book-page-maker/assets/838096/e40d0896-ec13-479b-9f43-78483ccf9f85)
 
 ## Author
 
