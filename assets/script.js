@@ -2,12 +2,16 @@ let prompt = "";
 
 document.addEventListener('DOMContentLoaded', function () {
   const target = document.getElementById('ai-content')
-  document.getElementById('input-form').addEventListener('submit', function (event) {
+  const button = document.querySelector('#input-form button');
+
+  document.getElementById('input-form').addEventListener('submit', async function (event) {
     event.preventDefault()
+    button.disabled = true;
     const formData = new FormData(event.target)
     const query = formData.get('query')
     prompt = query;
-    fetchChunked(target)
+    await fetchChunked(target)
+    button.disabled = false;
   })
 })
 
@@ -22,7 +26,6 @@ async function fetchChunked(target) {
   })
 
   const text = await response.text();
-  console.log(text);
   target.innerHTML = `<img src=${text} />`;
   return;
 
