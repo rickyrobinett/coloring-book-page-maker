@@ -10,7 +10,7 @@ export const renderer = jsxRenderer(({ children }) => (
     </head>
     <body>
       <header>
-        <h1>My first Workers AI</h1>
+        <h1>Coloring Book Page Maker</h1>
       </header>
       <div>{children}</div>
     </body>

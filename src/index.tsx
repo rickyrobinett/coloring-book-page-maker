@@ -29,18 +29,18 @@ app.get('*', renderer)
 app.get('/', (c) => {
   return c.render(
     <>
-      <h2>You</h2>
+      <h2>What should the coloring book page be of?</h2>
       <form id="input-form" autocomplete="off" method="post">
         <input
           type="text"
           name="query"
           style={{
-            width: '100%'
+            width: '89%'
           }}
         />
-        <button type="submit">Send</button>
+        <button type="submit">Create</button>
       </form>
-      <h2>AI</h2>
+      <h2>Page</h2>
       <pre
         id="ai-content"
         style={{
@@ -52,18 +52,21 @@ app.get('/', (c) => {
 })
 
 app.post('/ai', async (c) => {
-  const { messages } = await c.req.json<{ messages: Message[] }>()
+  const json = await c.req.json();
+  const prompt = json.prompt;
+  if(prompt === "") {
+    return c.render("Hello");
+  }
   const ai = new Ai(c.env.AI)
-  const answer: Answer = await ai.run('@cf/meta/llama-2-7b-chat-int8', {
-    messages
+  const image: Uint8Array = await ai.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', {
+    prompt: "A black and white coloring book page of " + prompt
   })
-  const strings = [...answer.response]
-  return c.streamText(async (stream) => {
-    for (const s of strings) {
-      stream.write(s)
-      await stream.sleep(10)
-    }
-  })
+  console.log(image);
+  const binaryString = new Uint8Array(image).reduce((acc, byte) => acc + String.fromCharCode(byte), '');
+
+  const base64Image = btoa(binaryString);
+
+  return c.render("data:image/png;base64,"+base64Image);
 })
 
 export default app
