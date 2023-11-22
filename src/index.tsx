@@ -52,20 +52,21 @@ app.get('/', (c) => {
 })
 
 app.post('/ai', async (c) => {
+  // Get prompt from request
   const json = await c.req.json();
   const prompt = json.prompt;
-  if(prompt === "") {
-    return c.render("Hello");
-  }
+
+  // Make request to Workers AI
   const ai = new Ai(c.env.AI)
   const image: Uint8Array = await ai.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', {
     prompt: "A black and white coloring book page of " + prompt
   })
-  console.log(image);
-  const binaryString = new Uint8Array(image).reduce((acc, byte) => acc + String.fromCharCode(byte), '');
 
+  // Convert response to base64
+  const binaryString = new Uint8Array(image).reduce((acc, byte) => acc + String.fromCharCode(byte), '');
   const base64Image = btoa(binaryString);
 
+  // Send base64 string in our response so we can embed it in our webpage
   return c.render("data:image/png;base64,"+base64Image);
 })
 
